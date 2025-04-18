@@ -33,6 +33,38 @@ function App() {
       });
   };
 
+  const toggleComplete = (id, completed) => {
+    axios.put(`http://localhost:5000/api/todos/${id}`, { completed: !completed })
+      .then(() => fetchTodos());
+  };
+  
+  const deleteTodo = (id) => {
+    axios.delete(`http://localhost:5000/api/todos/${id}`)
+      .then(() => fetchTodos());
+  }; 
+  
+  const [todos, setTodos] = useState([]);
+  const [newTodo, setNewTodo] = useState('');
+
+  const fetchTodos = () => {
+    axios.get('http://localhost:5000/api/todos')
+      .then(response => setTodos(response.data));
+  };
+
+  useEffect(() => {
+    fetchTodos();
+  }, []);
+
+  const addTodo = (e) => {
+    e.preventDefault();
+    if (!newTodo.trim()) return;
+    axios.post('http://localhost:5000/api/todos', { title: newTodo })
+      .then(() => {
+        setNewTodo('');
+        fetchTodos();
+      });
+  };
+
   return (
     <div className="App">
       <header className="App-header">
@@ -67,6 +99,32 @@ function App() {
 
         {/* Display Greeting */}
         {greeting && <p>{greeting}</p>}
+
+        {/* To-Do List */}
+        <h2>To-Do List</h2>
+        <form onSubmit={addTodo}>
+          <input
+            type="text"
+            placeholder="Add new task"
+            value={newTodo}
+            onChange={(e) => setNewTodo(e.target.value)}
+          />
+          <button type="submit">Add Task</button>
+        </form>
+
+        <ul>
+          {todos.map(todo => (
+            <li key={todo.id}>
+              <span style={{ textDecoration: todo.completed ? 'line-through' : 'none' }}>
+                {todo.title}
+              </span>
+              <button onClick={() => toggleComplete(todo.id, todo.completed)}>
+                {todo.completed ? 'Undo' : 'Complete'}
+              </button>
+              <button onClick={() => deleteTodo(todo.id)}>Delete</button>
+            </li>
+          ))}
+        </ul>
       </header>
     </div>
   );

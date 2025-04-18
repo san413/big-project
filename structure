@@ -1,0 +1,38 @@
+my-big-project/
+│
+├── frontend/          ← React
+├── backend/           ← Node.js
+├── django-backend/    ← Django + DRF
+├── go-api/            ← Go + Fiber/PostgreSQL
+├── rust-api/          ← (optional Rust backend)
+├── csharp-api/        ← ASP.NET Core
+└── python-script/     ← Some automation or mini feature
+
+
+✅ 1. To-Do App (CRUD)
+Add tasks (POST)
+
+View all tasks (GET)
+
+Mark as complete (PUT/PATCH)
+
+Delete task (DELETE)
+
+✅ 2. User Authentication
+Create login/signup form in React
+
+Create /api/login and /api/register routes in backend
+
+Add JWT for secure authentication
+
+✅ 3. Upload Profile Image (Node + Multer)
+Add file input in frontend
+
+Create file upload endpoint using multer in backend
+
+✅ 4. Django Integration
+Create a new folder django-backend/
+
+Practice API with Django Rest Framework (DRF)
+
+Connect it to PostgreSQL
