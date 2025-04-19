@@ -13,6 +13,7 @@ app.use(bodyParser.json());
 
 // Sample in-memory task list (you can use a database later)
 let todos = [];
+let users = []; // ✅ Add this line here
 
 // 🆕 Create a new task
 app.post('/api/todos', (req, res) => {
@@ -53,6 +54,34 @@ app.delete('/api/todos/:id', (req, res) => {
   const { id } = req.params;
   todos = todos.filter(t => t.id != id);
   res.status(204).send(); // No content
+});
+
+// 📝 Register a new user
+app.post('/api/register', (req, res) => {
+  const { username, password } = req.body;
+
+  // Check if user already exists
+  const existingUser = users.find(user => user.username === username);
+  if (existingUser) {
+    return res.status(400).json({ message: 'User already exists' });
+  }
+
+  // Add new user to memory
+  const newUser = { id: Date.now(), username, password }; // NOTE: No hashing for now
+  users.push(newUser);
+  res.status(201).json({ message: 'User registered successfully' });
+});
+
+// 🔐 Login user
+app.post('/api/login', (req, res) => {
+  const { username, password } = req.body;
+
+  const user = users.find(u => u.username === username && u.password === password);
+  if (!user) {
+    return res.status(401).json({ message: 'Invalid credentials' });
+  }
+
+  res.json({ message: 'Login successful', user: { id: user.id, username: user.username } });
 });
 
 // Example route
